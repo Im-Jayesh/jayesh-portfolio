@@ -12,7 +12,7 @@
 .stickyViewport {
   width: 100%;
   height: 100%;
-  perspective: 1200px;
+  perspective: 600px; /* Dialed back to 600px for the perfect middle-ground depth distortion */
   perspective-origin: 50% 50%;
   display: flex;
   justify-content: center;

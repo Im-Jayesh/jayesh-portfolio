@@ -65,12 +65,12 @@ function Plane({
   const yBase = useTransform(progress, [0, 1], [30, -50]); 
 
   // 2. 3D ANGLES
-  const rotateX = useTransform(progress, [0, 1], [0, 0]);     // 0 = Top and bottom edges are perfectly straight/horizontal
+  const rotateX = useTransform(progress, [0, 1], [-12, -12]);   // Negative = Top edge aggressively pushed towards you
   const rotateY = useTransform(progress, [0, 1], [-20, -20]); // Right edge drastically pointing towards you
   const rotateZ = useTransform(progress, [0, 1], [2, 2]);   // 2 degrees clockwise in the X-Y plane
   
   // 3. DEPTH AND SCALE
-  const scale = useTransform(progress, [0, 1], [0.9, 0.9]);
+  const scale = useTransform(progress, [0, 1], [0.9, 0.72]);  // Cards get exactly 20% smaller as they move to the back
 
   // ───────────────────────────────────────────────────────────────
 

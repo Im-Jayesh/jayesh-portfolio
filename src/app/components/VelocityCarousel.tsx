@@ -61,14 +61,14 @@ function Plane({
   // └─────────────────────────────────────────────────────────────┘
 
   // 1. POSITION
-  const x = useTransform(progress, [0, 1], ["-40vw", "60vw"]); 
-  const yBase = useTransform(progress, [0, 1], [30, -50]); 
+  const x = useTransform(progress, [0, 1], ["-40vw", "60vw"]);
+  const yBase = useTransform(progress, [0, 1], [30, -50]);
 
   // 2. 3D ANGLES
   const rotateX = useTransform(progress, [0, 1], [-12, -12]);   // Negative = Top edge aggressively pushed towards you
   const rotateY = useTransform(progress, [0, 1], [-20, -20]); // Right edge drastically pointing towards you
   const rotateZ = useTransform(progress, [0, 1], [2, 2]);   // 2 degrees clockwise in the X-Y plane
-  
+
   // 3. DEPTH AND SCALE
   const scale = useTransform(progress, [0, 1], [0.9, 0.72]);  // Cards get exactly 20% smaller as they move to the back
 
@@ -76,16 +76,16 @@ function Plane({
 
   // Add curve path based on velocity
   const yFinal = useTransform([yBase, progress, smoothVelocity], ([yB, p, v]: [number, number, number]) => {
-    // When velocity (v) is high, it bends the Y trajectory in a wave curve!
-    const curve = Math.sin(p * Math.PI) * (v * 15); 
-    return `${yB + curve}vh`;
+    // Single massive sweeping S-curve (lower frequency, higher amplitude)
+    const snakeCurve = Math.sin(p * Math.PI * 2) * (v * 45);
+    return `${yB + snakeCurve}vh`;
   });
 
   // Calculate Z with NO depth cascade (flat 2D), but keep the velocity wave ripple!
   const z = useTransform([progress, smoothVelocity], ([p, v]: [number, number]) => {
     const baseZ = 0; // ZERO depth cascade
-    // Depth wave ripple linked to scroll velocity
-    const wave = Math.sin(p * Math.PI * 4) * (v * 40); 
+    // Huge sweeping depth ripple to match the single S-curve
+    const wave = Math.cos(p * Math.PI * 2) * (v * 60);
     return baseZ + wave;
   });
 
@@ -138,7 +138,7 @@ export default function VelocityCarousel({ photos }: VelocityCarouselProps) {
     index: number;
   } | null>(null);
 
-  const totalPlanes = 7; // Reduced planes = 40% more spacing between cards
+  const totalPlanes = 15; // Reduced planes = 40% more spacing between cards
 
   // Track an internal scroll value manually rather than the page's scroll
   const scrollValue = useMotionValue(0);
@@ -169,12 +169,12 @@ export default function VelocityCarousel({ photos }: VelocityCarouselProps) {
   if (!photos || photos.length === 0) return null;
 
   return (
-    <section 
-      ref={containerRef} 
+    <section
+      ref={containerRef}
       className={styles.carouselSection}
       onWheel={handleWheel}
     >
-      <motion.div 
+      <motion.div
         className={styles.stickyViewport}
         onPan={handlePan}
         style={{ touchAction: "none" }}

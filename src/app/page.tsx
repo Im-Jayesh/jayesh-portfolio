@@ -22,10 +22,10 @@ export default async function Home() {
     <div className={styles.homeContainer}>
       {/* Dynamic luxury layout branding absolute details */}
       <div className={styles.branding}>
-        <h1 className={styles.brandTitle}>Heritage FW25/26</h1>
+        <h1 className={styles.brandTitle}>JAYESH&nbsp;&nbsp;SUTHAR</h1>
         <h2 className={styles.brandSub}>
-          Collection
-          <span className={styles.collectionCount}>({photos.length})</span>
+          devloper
+          {/* <span className={styles.collectionCount}>({photos.length})</span> */}
         </h2>
       </div>
 

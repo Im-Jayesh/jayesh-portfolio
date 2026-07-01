@@ -60,9 +60,9 @@ function Plane({
   // │ The arrays represent [front-closest-value, back-farthest-value]
   // └─────────────────────────────────────────────────────────────┘
 
-  // 1. POSITION (Keeps the exact steep angle, but extends way off screen so they don't pop!)
-  const x = useTransform(progress, [0, 1], ["-40vw", "50vw"]);
-  const yBase = useTransform(progress, [0, 1], [75, -100]);
+  // 1. POSITION (Midpoint eases the spacing: huge gaps at the front, tightly clumped at the back!)
+  const x = useTransform(progress, [0, 0.5, 1], ["-40vw", "32vw", "50vw"]);
+  const yBase = useTransform(progress, [0, 0.5, 1], [80, -65, -100]);
 
   // 2. 3D ANGLES
   const rotateX = useTransform(progress, [0, 1], [-12, -12]);   // Negative = Top edge aggressively pushed towards you
@@ -71,23 +71,28 @@ function Plane({
 
   // 3. DEPTH AND SCALE
   // Keeps the cards large while on-screen (middle), and shrinks them rapidly as they reach the very back (top-right)
-  const scale = useTransform(progress, [0, 0.7, 1], [1.5, 1.2, 1]); 
+  const scale = useTransform(progress, [0, 0.7, 1], [1.6, 1.2, 1]); 
 
   // ───────────────────────────────────────────────────────────────
 
   // Add curve path based on velocity
   const yFinal = useTransform([yBase, progress, smoothVelocity], ([yB, p, v]: [number, number, number]) => {
-    // Single gentle arc across the entire track
-    const snakeCurve = Math.sin(p * Math.PI) * (v * 15);
+    // Slightly shorter wavelength (1.5 arcs)
+    const snakeCurve = Math.sin(p * Math.PI * 1.5) * (v * 25);
     return `${yB + snakeCurve}vh`;
   });
 
   // Calculate Z with gentle depth cascade at the backend
   const z = useTransform([progress, smoothVelocity], ([p, v]: [number, number]) => {
-    // Gently pushes the cards back into 3D space as they reach the backend
-    const baseZ = -800 * p; 
-    // Gentle depth wave ripple
-    const wave = Math.cos(p * Math.PI) * (v * 20);
+    // Non-linear depth to match the clumped X and Y positions (fast push back, then clump)
+    let baseZ = 0;
+    if (p < 0.5) {
+      baseZ = -640 * (p / 0.5); // Fast depth drop in the first half
+    } else {
+      baseZ = -640 - 160 * ((p - 0.5) / 0.5); // Slow depth drop in the second half
+    }
+    // Gentle depth wave ripple, slightly shorter wavelength
+    const wave = Math.cos(p * Math.PI * 1.5) * (v * 30);
     return baseZ + wave;
   });
 

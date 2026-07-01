@@ -4,6 +4,7 @@ import { getPhotos } from "./actions";
 import VelocityCarousel from "./components/VelocityCarousel";
 import { Meteors } from "./components/Meteors";
 import { LightRays } from "./components/LightRays";
+import { AntiScreenshot } from "./components/AntiScreenshot";
 import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +23,7 @@ export default async function Home() {
 
   return (
     <div className={styles.homeContainer}>
+      <AntiScreenshot />
       <Meteors number={50} className="z-0" />
       <LightRays className="z-0" />
       {/* Dynamic luxury layout branding absolute details */}

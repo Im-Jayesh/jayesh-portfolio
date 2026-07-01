@@ -93,7 +93,13 @@ export const PixelImage = ({
   }, [rows, cols, maxAnimationDelay])
 
   return (
-    <div className={`relative ${className || "h-72 w-72 md:h-96 md:w-96"} select-none`}>
+    <div 
+      className={`relative ${className || "h-72 w-72 md:h-96 md:w-96"} select-none`}
+      onContextMenu={(e) => e.preventDefault()}
+      onDragStart={(e) => e.preventDefault()}
+    >
+      {/* Invisible overlay for extra inspect protection */}
+      <div className="absolute inset-0 z-50 bg-transparent" />
       {/* Hidden image to force the container to take the intrinsic aspect ratio and size of the source image */}
       <img src={src} className="invisible h-full w-full object-contain pointer-events-none" alt="" />
       {pieces.map((piece, index) => (
@@ -111,6 +117,8 @@ export const PixelImage = ({
             alt={`Pixel image piece ${index + 1}`}
             className={`z-1 h-full w-full object-contain ${grayscaleAnimation ? (showColor ? "grayscale-0" : "grayscale") : ""}`}
             style={{
+              pointerEvents: "none",
+              userSelect: "none",
               transition: grayscaleAnimation
                 ? `filter ${pixelFadeInDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`
                 : "none",

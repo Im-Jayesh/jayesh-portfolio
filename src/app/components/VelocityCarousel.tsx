@@ -126,13 +126,19 @@ function Plane({
         scale: { type: "spring", stiffness: 300, damping: 30 },
       }}
     >
-      <div className={styles.planeImageContainer}>
+      <div 
+        className={styles.planeImageContainer}
+        onContextMenu={(e) => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
+      >
         <img
           src={photo.url}
           alt={`Plane ${index}`}
           className={styles.planeImage}
           draggable={false}
+          style={{ pointerEvents: "none", userSelect: "none" }}
         />
+        <div style={{ position: "absolute", inset: 0, zIndex: 10, background: "transparent" }} />
       </div>
       <div className={styles.planeIndex}>{String(index).padStart(2, "0")}</div>
     </motion.div>

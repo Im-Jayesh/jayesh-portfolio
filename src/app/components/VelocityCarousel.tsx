@@ -62,7 +62,7 @@ function Plane({
 
   // 1. POSITION (Keeps the exact steep angle, but extends way off screen so they don't pop!)
   const x = useTransform(progress, [0, 1], ["-40vw", "50vw"]);
-  const yBase = useTransform(progress, [0, 1], [70, -90]);
+  const yBase = useTransform(progress, [0, 1], [75, -100]);
 
   // 2. 3D ANGLES
   const rotateX = useTransform(progress, [0, 1], [-12, -12]);   // Negative = Top edge aggressively pushed towards you
@@ -70,7 +70,8 @@ function Plane({
   const rotateZ = useTransform(progress, [0, 1], [2, 2]);   // 2 degrees clockwise in the X-Y plane
 
   // 3. DEPTH AND SCALE
-  const scale = useTransform(progress, [0, 1], [1.1, 0.5]);  // Front cards are large, back cards visibly shrink to half size
+  // Keeps the cards large while on-screen (middle), and shrinks them rapidly as they reach the very back (top-right)
+  const scale = useTransform(progress, [0, 0.7, 1], [1.5, 1.2, 1]); 
 
   // ───────────────────────────────────────────────────────────────
 
@@ -81,9 +82,10 @@ function Plane({
     return `${yB + snakeCurve}vh`;
   });
 
-  // Calculate Z with NO depth cascade (flat 2D), but keep the velocity wave ripple!
+  // Calculate Z with gentle depth cascade at the backend
   const z = useTransform([progress, smoothVelocity], ([p, v]: [number, number]) => {
-    const baseZ = 0; // ZERO depth cascade
+    // Gently pushes the cards back into 3D space as they reach the backend
+    const baseZ = -800 * p; 
     // Gentle depth wave ripple
     const wave = Math.cos(p * Math.PI) * (v * 20);
     return baseZ + wave;

@@ -60,9 +60,9 @@ function Plane({
   // │ The arrays represent [front-closest-value, back-farthest-value]
   // └─────────────────────────────────────────────────────────────┘
 
-  // 1. POSITION (Rotated counter-clockwise 10% more!)
-  const x = useTransform(progress, [0, 1], ["-15vw", "30vw"]);
-  const yBase = useTransform(progress, [0, 1], [30, -50]);
+  // 1. POSITION (Keeps the exact steep angle, but extends way off screen so they don't pop!)
+  const x = useTransform(progress, [0, 1], ["-40vw", "50vw"]);
+  const yBase = useTransform(progress, [0, 1], [70, -90]);
 
   // 2. 3D ANGLES
   const rotateX = useTransform(progress, [0, 1], [-12, -12]);   // Negative = Top edge aggressively pushed towards you
@@ -70,22 +70,22 @@ function Plane({
   const rotateZ = useTransform(progress, [0, 1], [2, 2]);   // 2 degrees clockwise in the X-Y plane
 
   // 3. DEPTH AND SCALE
-  const scale = useTransform(progress, [0, 1], [0.9, 0.72]);  // Cards get exactly 20% smaller as they move to the back
+  const scale = useTransform(progress, [0, 1], [1.1, 0.5]);  // Front cards are large, back cards visibly shrink to half size
 
   // ───────────────────────────────────────────────────────────────
 
   // Add curve path based on velocity
   const yFinal = useTransform([yBase, progress, smoothVelocity], ([yB, p, v]: [number, number, number]) => {
-    // Increased wavelength (Math.PI * 1.5), reduced amplitude
-    const snakeCurve = Math.sin(p * Math.PI * 1.5) * (v * 25);
+    // Single gentle arc across the entire track
+    const snakeCurve = Math.sin(p * Math.PI) * (v * 15);
     return `${yB + snakeCurve}vh`;
   });
 
   // Calculate Z with NO depth cascade (flat 2D), but keep the velocity wave ripple!
   const z = useTransform([progress, smoothVelocity], ([p, v]: [number, number]) => {
     const baseZ = 0; // ZERO depth cascade
-    // Increased wavelength, reduced amplitude
-    const wave = Math.cos(p * Math.PI * 1.5) * (v * 35);
+    // Gentle depth wave ripple
+    const wave = Math.cos(p * Math.PI) * (v * 20);
     return baseZ + wave;
   });
 
@@ -106,10 +106,10 @@ function Plane({
         x,
         y: yFinal,
         z,
-        rotateX: isHovered ? 0 : rotateX,
-        rotateY: isHovered ? 0 : rotateY,
-        rotateZ: isHovered ? 0 : rotateZ,
-        scale: isHovered ? 1.2 : scale,
+        rotateX,
+        rotateY,
+        rotateZ,
+        scale,
         opacity,
       }}
       transition={{
@@ -138,7 +138,7 @@ export default function VelocityCarousel({ photos }: VelocityCarouselProps) {
     index: number;
   } | null>(null);
 
-  const totalPlanes = 10; // Reduced planes = 40% more spacing between cards
+  const totalPlanes = 14; // Reduced planes = 40% more spacing between cards
 
   // Track an internal scroll value manually rather than the page's scroll
   const scrollValue = useMotionValue(0);

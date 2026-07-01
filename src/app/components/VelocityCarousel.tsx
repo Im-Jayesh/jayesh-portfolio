@@ -77,14 +77,14 @@ function Plane({
   // ───────────────────────────────────────────────────────────────
 
   // Add curve path based on velocity
-  const yFinal = useTransform([yBase, progress, smoothVelocity], ([yB, p, v]: [number, number, number]) => {
+  const yFinal = useTransform([yBase, progress, smoothVelocity], ([yB, p, v]: any[]) => {
     // Slightly shorter wavelength (1.5 arcs)
     const snakeCurve = Math.sin(p * Math.PI * 1.5) * (v * 25);
     return `${yB + snakeCurve}vh`;
   });
 
   // Calculate Z with gentle depth cascade at the backend
-  const z = useTransform([progress, smoothVelocity], ([p, v]: [number, number]) => {
+  const z = useTransform([progress, smoothVelocity], ([p, v]: any[]) => {
     // Non-linear depth to match the clumped X and Y positions (fast push back, then clump)
     let baseZ = 0;
     if (p < 0.5) {

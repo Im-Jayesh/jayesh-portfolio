@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArrowRight, Image as ImageIcon } from "lucide-react";
 import { getPhotos } from "./actions";
 import VelocityCarousel from "./components/VelocityCarousel";
+import { Meteors } from "./components/Meteors";
+import { LightRays } from "./components/LightRays";
 import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
@@ -20,6 +22,8 @@ export default async function Home() {
 
   return (
     <div className={styles.homeContainer}>
+      <Meteors number={50} className="z-0" />
+      <LightRays className="z-0" />
       {/* Dynamic luxury layout branding absolute details */}
       <div className={styles.branding}>
         <h1 className={styles.brandTitle}>JAYESH&nbsp;&nbsp;SUTHAR</h1>

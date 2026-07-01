@@ -10,6 +10,7 @@ import {
   useMotionValue,
 } from "framer-motion";
 import { X } from "lucide-react";
+import { PixelImage } from "./PixelImage";
 import styles from "./carousel.module.css";
 
 // Helper to wrap values for infinite looping
@@ -229,9 +230,8 @@ export default function VelocityCarousel({ photos }: VelocityCarouselProps) {
                 <X size={14} />
                 <span>ESC</span>
               </button>
-              <img
+              <PixelImage
                 src={activePhoto.photo.url}
-                alt={activePhoto.photo.title || "Lightbox"}
                 className={styles.lightboxImage}
               />
               <p className={styles.lightboxTitle}>

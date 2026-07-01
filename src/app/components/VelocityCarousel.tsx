@@ -67,6 +67,7 @@ function Plane({
   // 2. 3D ANGLES
   const rotateX = useTransform(progress, [0, 1], [0, 0]);     // 0 = Top and bottom edges are perfectly straight/horizontal
   const rotateY = useTransform(progress, [0, 1], [-20, -20]); // Right edge drastically pointing towards you
+  const rotateZ = useTransform(progress, [0, 1], [2, 2]);   // 2 degrees clockwise in the X-Y plane
   
   // 3. DEPTH AND SCALE
   const scale = useTransform(progress, [0, 1], [0.9, 0.9]);
@@ -107,6 +108,7 @@ function Plane({
         z,
         rotateX: isHovered ? 0 : rotateX,
         rotateY: isHovered ? 0 : rotateY,
+        rotateZ: isHovered ? 0 : rotateZ,
         scale: isHovered ? 1.2 : scale,
         opacity,
       }}

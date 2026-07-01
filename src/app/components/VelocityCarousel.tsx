@@ -64,9 +64,9 @@ function Plane({
   const x = useTransform(progress, [0, 1], ["-40vw", "60vw"]); 
   const yBase = useTransform(progress, [0, 1], [30, -50]); 
 
-  // 2. 3D ANGLES (Uniform angles keep the cards perfectly parallel like a real deck)
-  const rotateX = useTransform(progress, [0, 1], [8, 8]);    // Slight tilt back
-  const rotateY = useTransform(progress, [0, 1], [-15, -15]); // Negative = RIGHT edge pointing towards you!
+  // 2. 3D ANGLES
+  const rotateX = useTransform(progress, [0, 1], [0, 0]);     // 0 = Top and bottom edges are perfectly straight/horizontal
+  const rotateY = useTransform(progress, [0, 1], [-20, -20]); // Right edge drastically pointing towards you
   
   // 3. DEPTH AND SCALE
   const scale = useTransform(progress, [0, 1], [0.9, 0.9]);
@@ -136,7 +136,7 @@ export default function VelocityCarousel({ photos }: VelocityCarouselProps) {
     index: number;
   } | null>(null);
 
-  const totalPlanes = 10; // Reduced planes = massively increased spacing between cards
+  const totalPlanes = 7; // Reduced planes = 40% more spacing between cards
 
   // Track an internal scroll value manually rather than the page's scroll
   const scrollValue = useMotionValue(0);

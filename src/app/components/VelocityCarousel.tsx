@@ -142,7 +142,14 @@ export default function VelocityCarousel({ photos }: VelocityCarouselProps) {
 
   // Track an internal scroll value manually rather than the page's scroll
   const scrollValue = useMotionValue(0);
-  const scrollVelocity = useVelocity(scrollValue);
+  // Pass the raw scroll steps through a physics spring to make it buttery smooth!
+  const smoothScrollValue = useSpring(scrollValue, {
+    damping: 50,
+    stiffness: 200,
+    mass: 0.8,
+  });
+
+  const scrollVelocity = useVelocity(smoothScrollValue);
   const smoothVelocity = useSpring(scrollVelocity, {
     damping: 60,
     stiffness: 400,
@@ -180,7 +187,7 @@ export default function VelocityCarousel({ photos }: VelocityCarouselProps) {
                 key={i}
                 index={i}
                 totalPlanes={totalPlanes}
-                scrollValue={scrollValue}
+                scrollValue={smoothScrollValue}
                 smoothVelocity={smoothVelocity}
                 photo={photo}
                 onClick={() => setActivePhoto({ photo, index: i })}

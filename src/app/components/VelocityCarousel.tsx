@@ -60,8 +60,8 @@ function Plane({
   // │ The arrays represent [front-closest-value, back-farthest-value]
   // └─────────────────────────────────────────────────────────────┘
 
-  // 1. POSITION
-  const x = useTransform(progress, [0, 1], ["-40vw", "60vw"]);
+  // 1. POSITION (Rotated counter-clockwise 10% more!)
+  const x = useTransform(progress, [0, 1], ["-15vw", "30vw"]);
   const yBase = useTransform(progress, [0, 1], [30, -50]);
 
   // 2. 3D ANGLES
@@ -76,16 +76,16 @@ function Plane({
 
   // Add curve path based on velocity
   const yFinal = useTransform([yBase, progress, smoothVelocity], ([yB, p, v]: [number, number, number]) => {
-    // Single massive sweeping S-curve (lower frequency, higher amplitude)
-    const snakeCurve = Math.sin(p * Math.PI * 2) * (v * 45);
+    // Increased wavelength (Math.PI * 1.5), reduced amplitude
+    const snakeCurve = Math.sin(p * Math.PI * 1.5) * (v * 25);
     return `${yB + snakeCurve}vh`;
   });
 
   // Calculate Z with NO depth cascade (flat 2D), but keep the velocity wave ripple!
   const z = useTransform([progress, smoothVelocity], ([p, v]: [number, number]) => {
     const baseZ = 0; // ZERO depth cascade
-    // Huge sweeping depth ripple to match the single S-curve
-    const wave = Math.cos(p * Math.PI * 2) * (v * 60);
+    // Increased wavelength, reduced amplitude
+    const wave = Math.cos(p * Math.PI * 1.5) * (v * 35);
     return baseZ + wave;
   });
 
@@ -138,7 +138,7 @@ export default function VelocityCarousel({ photos }: VelocityCarouselProps) {
     index: number;
   } | null>(null);
 
-  const totalPlanes = 15; // Reduced planes = 40% more spacing between cards
+  const totalPlanes = 10; // Reduced planes = 40% more spacing between cards
 
   // Track an internal scroll value manually rather than the page's scroll
   const scrollValue = useMotionValue(0);
